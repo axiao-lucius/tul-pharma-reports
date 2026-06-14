@@ -9,15 +9,16 @@ sup.cite { font-size: 0.7em; vertical-align: super; line-height: 0; margin: 0 1p
 sup.cite > a { display: inline-block; padding: 1px 6px; border-radius: 999px; background: rgba(59,130,246,0.12); color: #2563eb; text-decoration: none; font-weight: 600; }
 sup.cite > a:hover { background: rgba(59,130,246,0.22); color: #1d4ed8; }
   :root {
-    --primary-blue: #1a365d;
-    --secondary-blue: #2c5282;
-    --accent-blue: #3182ce;
-    --bg-light: #f7fafc;
-    --text-main: #2d3748;
-    --text-muted: #4a5568;
+    --primary-blue: #2563eb;
+    --secondary-blue: #3b82f6;
+    --accent-blue: #06b6d4;
+    --bg-light: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
     --border-color: #e2e8f0;
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --sidebar-width: 280px;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --sidebar-width: 300px;
+    --gradient-header: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,7 +35,7 @@ sup.cite > a:hover { background: rgba(59,130,246,0.22); color: #1d4ed8; }
   /* Sidebar Navigation */
   .sidebar {
     width: var(--sidebar-width);
-    background: white;
+    background: #ffffff;
     border-right: 1px solid var(--border-color);
     position: fixed;
     top: 0;
@@ -44,11 +45,12 @@ sup.cite > a:hover { background: rgba(59,130,246,0.22); color: #1d4ed8; }
     padding: 2rem 0;
     z-index: 100;
     display: none;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.04);
   }
 
   @media (min-width: 1024px) {
     .sidebar { display: block; }
-    .main-content { margin-left: var(--sidebar-width); }
+    .main-content { margin-left: calc(var(--sidebar-width) + 2rem); }
   }
 
   .sidebar-header {
