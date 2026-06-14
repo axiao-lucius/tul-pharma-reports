@@ -54,20 +54,120 @@ tr:hover td{background:rgba(13,148,136,.05)}
 .sim-btn{padding:.5rem 1rem;background:#0d9488;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.85rem}
 .sim-btn:hover{background:#14b8a6}
 .footer{text-align:center;padding:2rem;color:#475569;font-size:.8rem;border-top:1px solid #1e293b;margin-top:2rem}
+.product-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.product-tab{padding:.6rem 1.5rem;border:1px solid #334155;background:transparent;color:#94a3b8;border-radius:8px;cursor:pointer;transition:all .3s;font-size:.9rem;font-weight:600}
+.product-tab.active,.product-tab:hover{background:#2563eb;color:#fff;border-color:#2563eb}
+.product-panel{display:none}
+.product-panel.active{display:block}
+.flow-compare{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media(max-width:768px){.flow-compare{grid-template-columns:1fr}}
+.flow-box{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:1.5rem}
+.flow-box.before{border-left:3px solid #ef4444}
+.flow-box.after{border-left:3px solid #22c55e}
+.flow-box h4{margin-bottom:.75rem;font-size:1rem}
+.flow-box.before h4{color:#ef4444}
+.flow-box.after h4{color:#22c55e}
+.flow-step{display:flex;align-items:center;gap:.5rem;padding:.4rem 0;font-size:.85rem;color:#94a3b8}
+.flow-step .arrow{color:#475569}
 </style>
 </head>
 <body>
-<div class="header"><h1>联邦制药 · 数字化转型与AI应用升级</h1><p>交互式演示系统 | 智能制造 · AI研发 · 智慧供应链 · 运营管理</p></div>
+<div class="header"><h1>联邦制药 · 数字化转型与AI应用升级</h1><p>交互式演示系统 | 协同办公 · 智能制造 · AI研发 · 智慧供应链 · 运营管理</p></div>
 <div class="nav">
-<button class="active" onclick="showSec('overview',this)">📊 现状总览</button>
+<button class="active" onclick="showSec('collaboration',this)">🤝 协同办公工具</button>
+<button onclick="showSec('overview',this)">📊 现状总览</button>
 <button onclick="showSec('scenarios',this)">🔬 AI应用场景</button>
 <button onclick="showSec('roadmap',this)">🗺️ 转型路线图</button>
 <button onclick="showSec('roi',this)">💰 ROI计算器</button>
 <button onclick="showSec('benchmark',this)">🏆 标杆对比</button>
 </div>
 
+<!-- 协同办公工具展示 -->
+<div id="collaboration" class="section active">
+<h2 style="color:#5eead4;margin-bottom:1rem">协同办公工具升级与采购</h2>
+<p style="color:#94a3b8;margin-bottom:1.5rem">通过钉钉AI表格、低代码平台、Teambition三大工具的组合部署，快速提升联邦制药跨部门协同效率、业务流转效果与管理颗粒度。</p>
+<div class="product-tabs">
+<button class="product-tab active" onclick="showProduct('aitable',this)">📊 钉钉AI表格</button>
+<button class="product-tab" onclick="showProduct('lowcode',this)">⚡ 低代码平台</button>
+<button class="product-tab" onclick="showProduct('teambition',this)">📋 Teambition项目管理</button>
+</div>
+<div id="prod-aitable" class="product-panel active">
+<div class="cards">
+<div class="card"><h3>📊 AI智能表格</h3><div class="metric">10x</div><p>数据汇总效率提升。替代传统Excel手工合并，AI自动识别字段、生成公式、智能填充。</p><div class="label">协同效率</div></div>
+<div class="card"><h3>🔄 多表联动</h3><div class="metric">实时</div><p>生产、质量、供应链数据跨表自动关联。一处更新全局同步，消除信息孤岛。</p><div class="label">流转效果</div></div>
+<div class="card"><h3>🔍 智能分析</h3><div class="metric">秒级</div><p>自然语言提问即可生成图表与洞察。管理层随时掌握产线状态、库存水位、合规进度。</p><div class="label">管理颗粒度</div></div>
+</div>
+<div class="flow-compare">
+<div class="flow-box before"><h4>❌ 改造前：月度产销协调会</h4>
+<div class="flow-step">各基地手工导出Excel → 邮件发送总部</div>
+<div class="flow-step"><span class="arrow">↓</span> 总部人工合并3个基地报表（2-3天）</div>
+<div class="flow-step"><span class="arrow">↓</span> 发现数据口径不一致，退回重做</div>
+<div class="flow-step"><span class="arrow">↓</span> 制作汇报PPT（1天）</div>
+<div class="flow-step" style="color:#ef4444;font-weight:600">⏱ 全流程耗时：5-7个工作日</div>
+</div>
+<div class="flow-box after"><h4>✅ 改造后：AI表格自动化</h4>
+<div class="flow-step">各基地在线填写AI表格模板</div>
+<div class="flow-step"><span class="arrow">↓</span> AI自动校验+合并+生成看板</div>
+<div class="flow-step"><span class="arrow">↓</span> 异常数据自动标红预警</div>
+<div class="flow-step"><span class="arrow">↓</span> 一键分享链接，实时查看最新数据</div>
+<div class="flow-step" style="color:#22c55e;font-weight:600">⏱ 全流程耗时：0.5个工作日</div>
+</div>
+</div>
+<div id="aitableChart" class="chart-box"></div>
+</div>
+<div id="prod-lowcode" class="product-panel">
+<div class="cards">
+<div class="card"><h3>⚡ 零代码搭建</h3><div class="metric">80%</div><p>审批流程上线时间缩短。拖拽式表单+流程设计器，业务人员自主配置无需IT介入。</p><div class="label">协同效率</div></div>
+<div class="card"><h3>🔗 系统集成</h3><div class="metric">API</div><p>打通ERP/MES/LIMS等存量系统。审批结果自动回写业务系统，消除二次录入。</p><div class="label">流转效果</div></div>
+<div class="card"><h3>📱 移动审批</h3><div class="metric">随时</div><p>手机端完成GMP偏差处理、采购审批、费用报销。平均审批时长从3天降至4小时。</p><div class="label">管理颗粒度</div></div>
+</div>
+<div class="flow-compare">
+<div class="flow-box before"><h4>❌ 改造前：GMP偏差处理流程</h4>
+<div class="flow-step">发现偏差 → 填写纸质偏差报告</div>
+<div class="flow-step"><span class="arrow">↓</span> 逐级签字审批（找领导耗时1-2天）</div>
+<div class="flow-step"><span class="arrow">↓</span> QA审核 → CAPA制定 → 再次审批</div>
+<div class="flow-step"><span class="arrow">↓</span> 归档纸质文件，审计时翻找困难</div>
+<div class="flow-step" style="color:#ef4444;font-weight:600">⏱ 平均闭环周期：7-14天</div>
+</div>
+<div class="flow-box after"><h4>✅ 改造后：低代码数字化流程</h4>
+<div class="flow-step">移动端拍照上传偏差现场</div>
+<div class="flow-step"><span class="arrow">↓</span> 自动触发审批流，相关人即时收到通知</div>
+<div class="flow-step"><span class="arrow">↓</span> 在线填写CAPA，关联历史偏差记录</div>
+<div class="flow-step"><span class="arrow">↓</span> 电子签名+审计追踪，合规归档</div>
+<div class="flow-step" style="color:#22c55e;font-weight:600">⏱ 平均闭环周期：1-3天</div>
+</div>
+</div>
+<div id="lowcodeChart" class="chart-box"></div>
+</div>
+<div id="prod-teambition" class="product-panel">
+<div class="cards">
+<div class="card"><h3>📋 项目全景视图</h3><div class="metric">100%</div><p>所有转型项目进度一目了然。甘特图+看板+日历多视图切换，管理层实时掌控全局。</p><div class="label">协同效率</div></div>
+<div class="card"><h3>👥 跨部门协作</h3><div class="metric">无缝</div><p>研发、生产、质量、IT在同一平台协作。任务自动分配、到期提醒、依赖关系可视化。</p><div class="label">流转效果</div></div>
+<div class="card"><h3>📈 工时与资源</h3><div class="metric">精细</div><p>精确到人的工时统计与负载均衡。识别瓶颈资源，优化项目排期与人力投入。</p><div class="label">管理颗粒度</div></div>
+</div>
+<div class="flow-compare">
+<div class="flow-box before"><h4>❌ 改造前：转型项目管理</h4>
+<div class="flow-step">各项目组独立维护Excel进度表</div>
+<div class="flow-step"><span class="arrow">↓</span> 每周开会口头同步进度</div>
+<div class="flow-step"><span class="arrow">↓</span> 跨部门依赖靠微信/电话沟通</div>
+<div class="flow-step"><span class="arrow">↓</span> 风险暴露滞后，救火式管理</div>
+<div class="flow-step" style="color:#ef4444;font-weight:600">⏱ 项目延期率：35-40%</div>
+</div>
+<div class="flow-box after"><h4>✅ 改造后：Teambition统一管理</h4>
+<div class="flow-step">所有项目统一看板，进度实时更新</div>
+<div class="flow-step"><span class="arrow">↓</span> 里程碑自动提醒，延期风险预警</div>
+<div class="flow-step"><span class="arrow">↓</span> 跨部门任务自动流转，评论@即时通知</div>
+<div class="flow-step"><span class="arrow">↓</span> 仪表盘汇总，管理层一屏掌控</div>
+<div class="flow-step" style="color:#22c55e;font-weight:600">⏱ 项目延期率：降至10-15%</div>
+</div>
+</div>
+<div id="teambitionChart" class="chart-box"></div>
+</div>
+<div id="collabRadar" class="chart-box"></div>
+</div>
+
 <!-- 现状总览 -->
-<div id="overview" class="section active">
+<div id="overview" class="section">
 <h2 style="color:#5eead4;margin-bottom:1rem">数字化成熟度评估</h2>
 <div class="cards">
 <div class="card"><h3>🏭 内蒙古·抗生素基地</h3><div class="metric">★★★★☆</div><p>DCS全覆盖，发酵智能优化系统已上线。MES集成度待提升。</p><div class="label">OT能力行业领先</div></div>
@@ -162,8 +262,18 @@ tr:hover td{background:rgba(13,148,136,.05)}
 var CI={};
 function showSec(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');initC(id)}
 function showScn(id){document.querySelectorAll('.scn-panel').forEach(p=>p.style.display='none');document.getElementById('scn-'+id).style.display='block';initScnC(id)}
-function initC(s){if(CI[s])return;CI[s]=1;setTimeout(function(){if(s==='overview')mkRadar();if(s==='scenarios')mkFerment();if(s==='roadmap')mkRoadmap();if(s==='roi')calcROI();if(s==='benchmark')mkBench()},150)}
+function showProduct(id,btn){document.querySelectorAll('.product-panel').forEach(p=>p.classList.remove('active'));document.getElementById('prod-'+id).classList.add('active');document.querySelectorAll('.product-tab').forEach(t=>t.classList.remove('active'));if(btn)btn.classList.add('active');initProdC(id)}
+function initC(s){if(CI[s])return;CI[s]=1;setTimeout(function(){if(s==='collaboration'){mkAitable();mkCollabRadar()}if(s==='overview')mkRadar();if(s==='scenarios')mkFerment();if(s==='roadmap')mkRoadmap();if(s==='roi')calcROI();if(s==='benchmark')mkBench()},150)}
 function initScnC(id){var map={ferment:'mkFerment',maint:'mkMaint',twin:'mkTwin',drug:'mkDrug'};if(window[map[id]])window[map[id]]()}
+function initProdC(id){var map={aitable:'mkAitable',lowcode:'mkLowcode',teambition:'mkTeambition'};if(window[map[id]])window[map[id]]()}
+
+function mkAitable(){var el=document.getElementById('aitableChart');if(!el||!el.offsetHeight)return;var c=echarts.init(el);c.setOption({tooltip:{trigger:'axis'},legend:{data:['改造前','改造后'],textStyle:{color:'#94a3b8'},bottom:0},grid:{top:'10%',bottom:'15%'},xAxis:{type:'category',data:['数据汇总','报表制作','异常发现','决策响应','跨部门对齐'],axisLabel:{color:'#64748b'}},yAxis:{type:'value',name:'耗时(小时)',axisLabel:{color:'#64748b'},splitLine:{lineStyle:{color:'#1e293b'}}},series:[{name:'改造前',type:'bar',data:[40,16,8,24,12],itemStyle:{color:'#ef4444'}},{name:'改造后',type:'bar',data:[2,1,0.5,2,1],itemStyle:{color:'#22c55e'}}]});window.addEventListener('resize',()=>c.resize())}
+
+function mkLowcode(){var el=document.getElementById('lowcodeChart');if(!el||!el.offsetHeight)return;var c=echarts.init(el);c.setOption({tooltip:{trigger:'axis'},legend:{data:['纸质流程','低代码流程'],textStyle:{color:'#94a3b8'},bottom:0},grid:{top:'10%',bottom:'15%'},xAxis:{type:'category',data:['GMP偏差','采购审批','费用报销','变更控制','客户投诉'],axisLabel:{color:'#64748b'}},yAxis:{type:'value',name:'闭环天数',axisLabel:{color:'#64748b'},splitLine:{lineStyle:{color:'#1e293b'}}},series:[{name:'纸质流程',type:'bar',data:[14,7,5,21,10],itemStyle:{color:'#ef4444'}},{name:'低代码流程',type:'bar',data:[3,1,0.5,5,2],itemStyle:{color:'#22c55e'}}]});window.addEventListener('resize',()=>c.resize())}
+
+function mkTeambition(){var el=document.getElementById('teambitionChart');if(!el||!el.offsetHeight)return;var c=echarts.init(el);c.setOption({tooltip:{trigger:'axis'},legend:{data:['传统管理','Teambition'],textStyle:{color:'#94a3b8'},bottom:0},grid:{top:'10%',bottom:'15%'},xAxis:{type:'category',data:['进度可见性','风险预警','资源利用率','跨部门协同','交付准时率'],axisLabel:{color:'#64748b'}},yAxis:{type:'value',name:'评分(满分100)',max:100,axisLabel:{color:'#64748b'},splitLine:{lineStyle:{color:'#1e293b'}}},series:[{name:'传统管理',type:'bar',data:[30,25,45,35,60],itemStyle:{color:'#ef4444'}},{name:'Teambition',type:'bar',data:[95,90,85,92,88],itemStyle:{color:'#22c55e'}}]});window.addEventListener('resize',()=>c.resize())}
+
+function mkCollabRadar(){var el=document.getElementById('collabRadar');if(!el||!el.offsetHeight)return;var c=echarts.init(el);c.setOption({title:{text:'协同办公三维提升效果',left:'center',textStyle:{color:'#5eead4',fontSize:14}},tooltip:{},legend:{data:['当前水平','工具部署后'],bottom:0,textStyle:{color:'#94a3b8'}},radar:{indicator:[{name:'跨部门协同效率',max:100},{name:'审批流转速度',max:100},{name:'数据透明度',max:100},{name:'项目交付准时率',max:100},{name:'管理决策时效',max:100},{name:'合规审计就绪度',max:100}],shape:'circle',splitArea:{areaStyle:{color:['rgba(37,99,246,0.05)','rgba(37,99,246,0.1)']}},axisName:{color:'#94a3b8'},splitLine:{lineStyle:{color:'#334155'}}},series:[{type:'radar',data:[{value:[35,30,25,60,40,45],name:'当前水平',areaStyle:{color:'rgba(239,68,68,0.2)'},lineStyle:{color:'#ef4444'}},{value:[90,92,95,88,85,90],name:'工具部署后',areaStyle:{color:'rgba(34,197,94,0.2)'},lineStyle:{color:'#22c55e'}}]}]});window.addEventListener('resize',()=>c.resize())}
 
 function mkRadar(){var c=echarts.init(document.getElementById('radarChart'));c.setOption({tooltip:{},legend:{data:['内蒙古·抗生素','中山·胰岛素','珠海·创新药'],bottom:0,textStyle:{color:'#94a3b8'}},radar:{indicator:[{name:'自动化水平',max:100},{name:'数据集成度',max:100},{name:'AI应用深度',max:100},{name:'合规完备度',max:100},{name:'人才储备',max:100}],shape:'circle',splitArea:{areaStyle:{color:['rgba(13,148,136,0.05)','rgba(13,148,136,0.1)']}},axisName:{color:'#94a3b8'},splitLine:{lineStyle:{color:'#334155'}}},series:[{type:'radar',data:[{value:[90,55,40,70,60],name:'内蒙古·抗生素',areaStyle:{color:'rgba(13,148,136,0.3)'},lineStyle:{color:'#14b8a6'}},{value:[60,70,25,90,50],name:'中山·胰岛素',areaStyle:{color:'rgba(59,130,246,0.2)'},lineStyle:{color:'#3b82f6'}},{value:[30,40,20,50,45],name:'珠海·创新药',areaStyle:{color:'rgba(234,179,8,0.2)'},lineStyle:{color:'#eab308'}}]}]});window.addEventListener('resize',()=>c.resize())}
 
@@ -183,7 +293,7 @@ function mkROI(v){var el=document.getElementById('roiChart');if(!el.offsetHeight
 
 function mkBench(){var c=echarts.init(document.getElementById('benchChart'));c.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['成本降低%','产量提升%','研发提速%'],textStyle:{color:'#94a3b8'},bottom:0},grid:{top:'10%',bottom:'15%'},xAxis:{type:'category',data:['川宁生物','诺和诺德','瑞迪博士','石药集团'],axisLabel:{color:'#64748b'}},yAxis:{type:'value',name:'%',axisLabel:{color:'#64748b'},splitLine:{lineStyle:{color:'#1e293b'}}},series:[{name:'成本降低%',type:'bar',data:[15,20,42,10],itemStyle:{color:'#14b8a6'}},{name:'产量提升%',type:'bar',data:[20,15,55,0],itemStyle:{color:'#3b82f6'}},{name:'研发提速%',type:'bar',data:[10,25,0,30],itemStyle:{color:'#eab308'}}]});window.addEventListener('resize',()=>c.resize())}
 
-initC('overview');
+initC('collaboration');
 </script>
 </body>
 </html>
