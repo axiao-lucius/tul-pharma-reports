@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>联邦制药数字化转型演示系统</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0f172a;color:#e2e8f0;overflow-x:hidden}
+.header{background:linear-gradient(135deg,#0d9488 0%,#1e293b 100%);padding:2rem;text-align:center;border-bottom:2px solid #14b8a6}
+.header h1{font-size:2rem;margin-bottom:.5rem;background:linear-gradient(90deg,#5eead4,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header p{color:#94a3b8;font-size:1rem}
+.nav{display:flex;justify-content:center;gap:.5rem;padding:1rem;background:#1e293b;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.nav button{padding:.6rem 1.2rem;border:1px solid #334155;background:transparent;color:#94a3b8;border-radius:8px;cursor:pointer;transition:all .3s;font-size:.9rem}
+.nav button.active,.nav button:hover{background:#0d9488;color:#fff;border-color:#0d9488}
+.section{display:none;padding:2rem;max-width:1200px;margin:0 auto}
+.section.active{display:block}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:1.5rem}
+.card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:1.5rem;transition:all .3s}
+.card:hover{border-color:#14b8a6;transform:translateY(-2px);box-shadow:0 8px 24px rgba(13,148,136,.15)}
+.card h3{color:#5eead4;margin-bottom:.75rem;font-size:1.1rem}
+.card p{color:#94a3b8;font-size:.9rem;line-height:1.6}
+.card .metric{font-size:2rem;font-weight:700;color:#14b8a6;margin:.5rem 0}
+.card .label{font-size:.8rem;color:#64748b}
+.chart-box{width:100%;height:400px;margin:1.5rem 0;background:#1e293b;border-radius:12px;border:1px solid #334155}
+.timeline{position:relative;padding:2rem 0}
+.timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;background:#334155;transform:translateX(-50%)}
+.tl-item{position:relative;width:50%;padding:1rem 2rem;margin-bottom:2rem}
+.tl-item:nth-child(odd){left:0;text-align:right}
+.tl-item:nth-child(even){left:50%;text-align:left}
+.tl-item::after{content:'';position:absolute;top:1.5rem;width:12px;height:12px;background:#14b8a6;border-radius:50%;border:2px solid #0f172a}
+.tl-item:nth-child(odd)::after{right:-6px}
+.tl-item:nth-child(even)::after{left:-6px}
+.tl-year{font-size:1.3rem;font-weight:700;color:#5eead4;margin-bottom:.5rem}
+.tl-content{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:1rem;font-size:.9rem;line-height:1.6}
+.roi-panel{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem}
+@media(max-width:768px){.roi-panel{grid-template-columns:1fr}.tl-item{width:100%;left:0!important;text-align:left!important;padding-left:2rem}.timeline::before{left:0}}
+.slider-group{margin-bottom:1.5rem}
+.slider-group label{display:flex;justify-content:space-between;margin-bottom:.5rem;font-size:.9rem}
+.slider-group input[type=range]{width:100%;accent-color:#14b8a6}
+.roi-result{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:2rem;text-align:center}
+.roi-result .big-num{font-size:3rem;font-weight:700;color:#14b8a6}
+table{width:100%;border-collapse:collapse;margin-top:1rem}
+th,td{padding:.75rem 1rem;text-align:left;border-bottom:1px solid #334155;font-size:.9rem}
+th{color:#5eead4;background:#1e293b}
+td{color:#cbd5e1}
+tr:hover td{background:rgba(13,148,136,.05)}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.75rem;font-weight:600}
+.tag-green{background:rgba(34,197,94,.15);color:#4ade80}
+.tag-yellow{background:rgba(234,179,8,.15);color:#facc15}
+.tag-blue{background:rgba(59,130,246,.15);color:#60a5fa}
+.sim-controls{display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
+.sim-btn{padding:.5rem 1rem;background:#0d9488;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.85rem}
+.sim-btn:hover{background:#14b8a6}
+.footer{text-align:center;padding:2rem;color:#475569;font-size:.8rem;border-top:1px solid #1e293b;margin-top:2rem}
+</style>
+</head>
+<body>
+<div class="header"><h1>联邦制药 · 数字化转型与AI应用升级</h1><p>交互式演示系统 | 智能制造 · AI研发 · 智慧供应链 · 运营管理</p></div>
+<div class="nav">
+<button class="active" onclick="showSec('overview',this)">📊 现状总览</button>
+<button onclick="showSec('scenarios',this)">🔬 AI应用场景</button>
+<button onclick="showSec('roadmap',this)">🗺️ 转型路线图</button>
+<button onclick="showSec('roi',this)">💰 ROI计算器</button>
+<button onclick="showSec('benchmark',this)">🏆 标杆对比</button>
+</div>
+
+<!-- 现状总览 -->
+<div id="overview" class="section active">
+<h2 style="color:#5eead4;margin-bottom:1rem">数字化成熟度评估</h2>
+<div class="cards">
+<div class="card"><h3>🏭 内蒙古·抗生素基地</h3><div class="metric">★★★★☆</div><p>DCS全覆盖，发酵智能优化系统已上线。MES集成度待提升。</p><div class="label">OT能力行业领先</div></div>
+<div class="card"><h3>💉 中山·胰岛素基地</h3><div class="metric">★★★☆☆</div><p>BMS/LIMS符合EU/FDA数据完整性标准。排产优化偏传统。</p><div class="label">GMP合规驱动</div></div>
+<div class="card"><h3>🧬 珠海·创新药中心</h3><div class="metric">★★☆☆☆</div><p>ELN等研发工具已部署。AI辅助药物发现能力待建设。</p><div class="label">建设期·灵活性优先</div></div>
+<div class="card"><h3>🐾 动保板块</h3><div class="metric">★★☆☆☆</div><p>人用药工艺迁移基础良好。独立数字化体系尚未建立。</p><div class="label">横向延伸阶段</div></div>
+</div>
+<div id="radarChart" class="chart-box"></div>
+<h2 style="color:#5eead4;margin:2rem 0 1rem">三大核心痛点</h2>
+<div class="cards">
+<div class="card" style="border-left:3px solid #ef4444"><h3>🔴 集采成本压力</h3><p>胰岛素集采价格降幅超40%，需通过数字化挖掘生产端"毫厘利润"。发酵收率每提升0.5%即对应千万级收益。</p></div>
+<div class="card" style="border-left:3px solid #f59e0b"><h3>🟡 发酵工艺黑箱</h3><p>批次间差异依赖老师傅经验调控，急需从"经验驱动"转向"数据驱动"。关键CQA离线检测延迟4-8小时。</p></div>
+<div class="card" style="border-left:3px solid #3b82f6"><h3>🔵 出海合规挑战</h3><p>FDA/EU对CSV及数据可靠性审查日益严苛。纸质记录或孤立系统已成审计风险点。</p></div>
+</div>
+</div>
+
+<!-- AI应用场景 -->
+<div id="scenarios" class="section">
+<h2 style="color:#5eead4;margin-bottom:1rem">四大优先场景实施方案</h2>
+<div class="sim-controls">
+<button class="sim-btn" onclick="showScn('ferment')">🧫 发酵软测量</button>
+<button class="sim-btn" onclick="showScn('maint')">⚙️ 预测性维护</button>
+<button class="sim-btn" onclick="showScn('twin')">🔄 数字孪生</button>
+<button class="sim-btn" onclick="showScn('drug')">💊 AI药物研发</button>
+</div>
+<div id="scn-ferment" class="scn-panel">
+<div class="cards"><div class="card"><h3>发酵参数软测量</h3><div class="metric">P0级</div><p>RNN/LSTM模型实时推断CQA，替代4-8h离线化验</p></div><div class="card"><h3>预期收益</h3><div class="metric">+2-3%</div><p>年增收3,000-5,000万<br>批次差异降低30%</p></div></div>
+<div id="fermentChart" class="chart-box"></div>
+</div>
+<div id="scn-maint" class="scn-panel" style="display:none">
+<div class="cards"><div class="card"><h3>设备预测性维护</h3><div class="metric">P0速赢</div><p>振动+声纹+电流多模态融合，EAM闭环管理</p></div><div class="card"><h3>预期收益</h3><div class="metric">6-12月</div><p>回收期<br>停机减少20-30%</p></div></div>
+<div id="maintChart" class="chart-box"></div>
+</div>
+<div id="scn-twin" class="scn-panel" style="display:none">
+<div class="cards"><div class="card"><h3>AI工艺优化+数字孪生</h3><div class="metric">P1级</div><p>高保真仿真环境，AI-APC人机协同</p></div><div class="card"><h3>预期收益</h3><div class="metric">+1-2%</div><p>收率再提升<br>技术转移缩短30%</p></div></div>
+<div id="twinChart" class="chart-box"></div>
+</div>
+<div id="scn-drug" class="scn-panel" style="display:none">
+<div class="cards"><div class="card"><h3>AI驱动药物研发</h3><div class="metric">P1级</div><p>CSP晶型预测、SCA合成对照臂、RAG医学助手</p></div><div class="card"><h3>预期收益</h3><div class="metric">-30%</div><p>研发周期缩短<br>筛选准确率↑3x</p></div></div>
+<div id="drugChart" class="chart-box"></div>
+</div>
+</div>
+
+<!-- 转型路线图 -->
+<div id="roadmap" class="section">
+<h2 style="color:#5eead4;margin-bottom:2rem;text-align:center">三年转型路线图</h2>
+<div class="timeline">
+<div class="tl-item"><div class="tl-year">第一年 · 速赢奠基期</div><div class="tl-content">✅ 预测性维护试点验证（6个月）<br>✅ 发酵软传感器部署与验证<br>✅ 工业数据中台架构搭建<br>🎯 <strong>里程碑：首个AI项目产生可量化财务收益</strong></div></div>
+<div class="tl-item"><div class="tl-year">第二年 · 规模扩展期</div><div class="tl-content">🔧 AI-APC人机协同上线<br>🔧 数字孪生扩展至多条产线<br>🔧 MES系统集成与批次分析自动化<br>🎯 <strong>里程碑：制造成本降低10%-15%</strong></div></div>
+<div class="tl-item"><div class="tl-year">第三年 · 智能跃升期</div><div class="tl-content">🚀 AI闭环自动控制逐步开放<br>🚀 SCA与医学AI助手全面上线<br>🚀 跨厂区统一数据平台建成<br>🎯 <strong>里程碑：整体制造成本降低15%-25%</strong></div></div>
+</div>
+<div id="roadmapChart" class="chart-box"></div>
+</div>
+
+<!-- ROI计算器 -->
+<div id="roi" class="section">
+<h2 style="color:#5eead4;margin-bottom:1rem">投资回报测算器</h2>
+<p style="color:#94a3b8;margin-bottom:1.5rem">拖动滑块调整各场景投入，实时计算预期收益</p>
+<div class="roi-panel">
+<div>
+<div class="slider-group"><label><span>🔧 预测性维护</span><span id="v1">250万</span></label><input type="range" min="0" max="500" value="250" oninput="calcROI()"></div>
+<div class="slider-group"><label><span>🧫 发酵软测量</span><span id="v2">650万</span></label><input type="range" min="0" max="1200" value="650" oninput="calcROI()"></div>
+<div class="slider-group"><label><span>🔄 数字孪生+APC</span><span id="v3">1000万</span></label><input type="range" min="0" max="2000" value="1000" oninput="calcROI()"></div>
+<div class="slider-group"><label><span>💊 AI药物研发</span><span id="v4">800万</span></label><input type="range" min="0" max="1500" value="800" oninput="calcROI()"></div>
+</div>
+<div>
+<div class="roi-result"><div style="color:#94a3b8;font-size:.9rem">总投入</div><div class="big-num" id="totalInv">2,700万</div></div>
+<div class="roi-result" style="margin-top:1rem"><div style="color:#94a3b8;font-size:.9rem">预期年化收益</div><div class="big-num" id="totalRet" style="color:#4ade80">7,350万</div></div>
+<div class="roi-result" style="margin-top:1rem"><div style="color:#94a3b8;font-size:.9rem">投资回收期</div><div class="big-num" id="payback" style="color:#facc15">4.4个月</div></div>
+<div class="roi-result" style="margin-top:1rem"><div style="color:#94a3b8;font-size:.9rem">3年累计ROI</div><div class="big-num" id="roi3y" style="color:#60a5fa">717%</div></div>
+</div>
+</div>
+<div id="roiChart" class="chart-box"></div>
+</div>
+
+<!-- 标杆对比 -->
+<div id="benchmark" class="section">
+<h2 style="color:#5eead4;margin-bottom:1rem">行业标杆案例对标</h2>
+<table><thead><tr><th>标杆企业</th><th>核心领域</th><th>关键成果</th><th>对联邦制药启示</th><th>风险警示</th></tr></thead>
+<tbody>
+<tr><td><strong>川宁生物</strong></td><td>抗生素发酵AI</td><td>500m³罐AI调优<br>全流程酶法7-ADCA</td><td>PAT+软传感器优先</td><td><span class="tag tag-yellow">J曲线效应</span></td></tr>
+<tr><td><strong>诺和诺德</strong></td><td>生物制品数字孪生</td><td>OpenAI全业务整合<br>CQA实时监测</td><td>分阶段数字孪生</td><td><span class="tag tag-blue">监管验证悖论</span></td></tr>
+<tr><td><strong>瑞迪博士</strong></td><td>灯塔工厂</td><td>成本↓40-45%<br>产量↑50-60%</td><td>"先深后广"策略</td><td><span class="tag tag-green">需长期承诺</span></td></tr>
+<tr><td><strong>石药集团</strong></td><td>AI药物发现</td><td>研发时间↓30%<br>成本↓50%</td><td>外部合作+内部自研</td><td><span class="tag tag-yellow">人才瓶颈</span></td></tr>
+</tbody></table>
+<div id="benchChart" class="chart-box"></div>
+</div>
+
+<div class="footer">联邦制药数字化转型演示系统 · Wukong AI 生成 · 2026年6月</div>
+
+<script>
+var CI={};
+function showSec(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');initC(id)}
+function showScn(id){document.querySelectorAll('.scn-panel').forEach(p=>p.style.display='none');document.getElementById('scn-'+id).style.display='block';initScnC(id)}
+function initC(s){if(CI[s])return;CI[s]=1;setTimeout(function(){if(s==='overview')mkRadar();if(s==='scenarios')mkFerment();if(s==='roadmap')mkRoadmap();if(s==='roi')calcROI();if(s==='benchmark')mkBench()},150)}
+function initScnC(id){var map={ferment:'mkFerment',maint:'mkMaint',twin:'mkTwin',drug:'mkDrug'};if(window[map[id]])window[map[id]]()}
+
+function mkRadar(){var c=echarts.init(document.getElementById('radarChart'));c.setOption({tooltip:{},legend:{data:['内蒙古·抗生素','中山·胰岛素','珠海·创新药'],bottom:0,textStyle:{color:'#94a3b8'}},radar:{indicator:[{name:'自动化水平',max:100},{name:'数据集成度',max:100},{name:'AI应用深度',max:100},{name:'合规完备度',max:100},{name:'人才储备',max:100}],shape:'circle',splitArea:{areaStyle:{color:['rgba(13,148,136,0.05)','rgba(13,148,136,0.1)']}},axisName:{color:'#94a3b8'},splitLine:{lineStyle:{color:'#334155'}}},series:[{type:'radar',data:[{value:[90,55,40,70,60],name:'内蒙古·抗生素',areaStyle:{color:'rgba(13,148,136,0.3)'},lineStyle:{color:'#14b8a6'}},{value:[60,70,25,90,50],name:'中山·胰岛素',areaStyle:{color:'rgba(59,130,246,0.2)'},lineStyle:{color:'#3b82f6'}},{value:[30,40,20,50,45],name:'珠海·创新药',areaStyle:{color:'rgba(234,179,8,0.2)'},lineStyle:{color:'#eab308'}}]}]});window.addEventListener('resize',()=>c.resize())}
+
+function mkFerment(){var c=echarts.init(document.getElementById('fermentChart'));var h=[],pa=[],pp=[],da=[],dp=[];for(var i=0;i<=48;i++){h.push(i+'h');pa.push((6.8+Math.sin(i/8)*0.3+(Math.random()*0.1-0.05)).toFixed(2));pp.push((6.8+Math.sin(i/8)*0.3).toFixed(2));da.push((30+Math.cos(i/6)*10+(Math.random()*2-1)).toFixed(1));dp.push((30+Math.cos(i/6)*10).toFixed(1))}c.setOption({tooltip:{trigger:'axis'},legend:{data:['pH实际','pH预测','DO实际','DO预测'],textStyle:{color:'#94a3b8'},bottom:0},grid:{top:'10%',bottom:'15%'},xAxis:{type:'category',data:h,axisLabel:{color:'#64748b'}},yAxis:[{type:'value',name:'pH',axisLabel:{color:'#64748b'},splitLine:{lineStyle:{color:'#1e293b'}}},{type:'value',name:'DO(%)',axisLabel:{color:'#64748b'},splitLine:{show:false}}],series:[{name:'pH实际',type:'line',data:pa,lineStyle:{color:'#14b8a6'},symbol:'none'},{name:'pH预测',type:'line',data:pp,lineStyle:{color:'#5eead4',type:'dashed'},symbol:'none'},{name:'DO实际',type:'line',yAxisIndex:1,data:da,lineStyle:{color:'#3b82f6'},symbol:'none'},{name:'DO预测',type:'line',yAxisIndex:1,data:dp,lineStyle:{color:'#60a5fa',type:'dashed'},symbol:'none'}]});window.addEventListener('resize',()=>c.resize())}
+
+function mkMaint(){var c=echarts.init(document.getElementById('maintChart'));c.setOption({tooltip:{trigger:'axis'},legend:{data:['振动幅值','健康阈值','预警线'],textStyle:{color:'#94a3b8'},bottom:0},grid:{top:'10%',bottom:'15%'},xAxis:{type:'category',data:['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],axisLabel:{color:'#64748b'}},yAxis:{type:'value',name:'mm/s',axisLabel:{color:'#64748b'},splitLine:{lineStyle:{color:'#1e293b'}}},series:[{name:'振动幅值',type:'line',data:[2.1,2.3,2.5,2.8,3.2,3.8,4.5,5.2,4.1,2.4,2.2,2.1],areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'rgba(239,68,68,0.3)'},{offset:1,color:'rgba(239,68,68,0)'}]}},lineStyle:{color:'#ef4444'},markPoint:{data:[{coord:['8月',5.2],value:'⚠️ 故障预警',itemStyle:{color:'#ef4444'}}]}},{name:'健康阈值',type:'line',data:Array(12).fill(4.0),lineStyle:{color:'#f59e0b',type:'dashed'},symbol:'none'},{name:'预警线',type:'line',data:Array(12).fill(5.0),lineStyle:{color:'#ef4444',type:'dotted'},symbol:'none'}]});window.addEventListener('resize',()=>c.resize())}
+
+function mkTwin(){var c=echarts.init(document.getElementById('twinChart'));c.setOption({tooltip:{trigger:'axis'},legend:{data:['传统控制','AI-APC优化'],textStyle:{color:'#94a3b8'},bottom:0},grid:{top:'10%',bottom:'15%'},xAxis:{type:'category',data:['批次1','批次2','批次3','批次4','批次5','批次6','批次7','批次8','批次9','批次10'],axisLabel:{color:'#64748b'}},yAxis:{type:'value',name:'收率(%)',min:80,max:100,axisLabel:{color:'#64748b'},splitLine:{lineStyle:{color:'#1e293b'}}},series:[{name:'传统控制',type:'bar',data:[85.2,84.8,86.1,83.9,85.5,84.2,85.8,84.5,86.0,85.1],itemStyle:{color:'#334155'}},{name:'AI-APC优化',type:'bar',data:[87.5,88.1,87.8,88.4,87.9,88.2,88.6,87.7,88.3,88.0],itemStyle:{color:'#14b8a6'}}]});window.addEventListener('resize',()=>c.resize())}
+
+function mkDrug(){var c=echarts.init(document.getElementById('drugChart'));c.setOption({tooltip:{trigger:'item'},legend:{bottom:0,textStyle:{color:'#94a3b8'}},series:[{type:'pie',radius:['40%','70%'],center:['50%','45%'],data:[{value:30,name:'晶型预测',itemStyle:{color:'#14b8a6'}},{value:25,name:'临床试验优化',itemStyle:{color:'#3b82f6'}},{value:20,name:'医学AI助手',itemStyle:{color:'#eab308'}},{value:15,name:'合成对照臂',itemStyle:{color:'#a78bfa'}},{value:10,name:'数据治理',itemStyle:{color:'#64748b'}}],label:{color:'#e2e8f0'}}]});window.addEventListener('resize',()=>c.resize())}
+
+function mkRoadmap(){var c=echarts.init(document.getElementById('roadmapChart'));c.setOption({tooltip:{trigger:'axis'},legend:{data:['累计投入(万)','累计收益(万)'],textStyle:{color:'#94a3b8'},bottom:0},grid:{top:'10%',bottom:'15%'},xAxis:{type:'category',data:['Y1-Q1','Y1-Q2','Y1-Q3','Y1-Q4','Y2-Q1','Y2-Q2','Y2-Q3','Y2-Q4','Y3-Q1','Y3-Q2','Y3-Q3','Y3-Q4'],axisLabel:{color:'#64748b'}},yAxis:{type:'value',name:'万元',axisLabel:{color:'#64748b'},splitLine:{lineStyle:{color:'#1e293b'}}},series:[{name:'累计投入(万)',type:'line',data:[500,1200,1800,2400,2800,3200,3500,3800,4000,4200,4400,4500],areaStyle:{color:'rgba(239,68,68,0.1)'},lineStyle:{color:'#ef4444'}},{name:'累计收益(万)',type:'line',data:[0,200,800,2000,3500,5500,8000,11000,14500,18500,23000,28000],areaStyle:{color:'rgba(13,148,136,0.2)'},lineStyle:{color:'#14b8a6'}}]});window.addEventListener('resize',()=>c.resize())}
+
+function calcROI(){var ii=document.querySelectorAll('#roi input[type=range]');var v=[parseInt(ii[0].value),parseInt(ii[1].value),parseInt(ii[2].value),parseInt(ii[3].value)];document.getElementById('v1').textContent=v[0]+'万';document.getElementById('v2').textContent=v[1]+'万';document.getElementById('v3').textContent=v[2]+'万';document.getElementById('v4').textContent=v[3]+'万';var t=v[0]+v[1]+v[2]+v[3];var r=v[0]*2.5+v[1]*4+v[2]*2+v[3]*0.8;var pb=r>0?(t/r*12).toFixed(1):'∞';var r3=r>0?((r*3-t)/t*100).toFixed(0):'0';document.getElementById('totalInv').textContent=t.toLocaleString()+'万';document.getElementById('totalRet').textContent=Math.round(r).toLocaleString()+'万';document.getElementById('payback').textContent=pb+'个月';document.getElementById('roi3y').textContent=r3+'%';mkROI(v)}
+
+function mkROI(v){var el=document.getElementById('roiChart');if(!el.offsetHeight)return;var c=echarts.init(el);c.setOption({tooltip:{trigger:'axis'},legend:{data:['投入','年化收益'],textStyle:{color:'#94a3b8'},bottom:0},grid:{top:'10%',bottom:'15%'},xAxis:{type:'category',data:['预测性维护','发酵软测量','数字孪生','AI药物研发'],axisLabel:{color:'#64748b'}},yAxis:{type:'value',name:'万元',axisLabel:{color:'#64748b'},splitLine:{lineStyle:{color:'#1e293b'}}},series:[{name:'投入',type:'bar',data:v,itemStyle:{color:'#ef4444'}},{name:'年化收益',type:'bar',data:[v[0]*2.5,v[1]*4,v[2]*2,v[3]*0.8],itemStyle:{color:'#14b8a6'}}]});window.addEventListener('resize',()=>c.resize())}
+
+function mkBench(){var c=echarts.init(document.getElementById('benchChart'));c.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['成本降低%','产量提升%','研发提速%'],textStyle:{color:'#94a3b8'},bottom:0},grid:{top:'10%',bottom:'15%'},xAxis:{type:'category',data:['川宁生物','诺和诺德','瑞迪博士','石药集团'],axisLabel:{color:'#64748b'}},yAxis:{type:'value',name:'%',axisLabel:{color:'#64748b'},splitLine:{lineStyle:{color:'#1e293b'}}},series:[{name:'成本降低%',type:'bar',data:[15,20,42,10],itemStyle:{color:'#14b8a6'}},{name:'产量提升%',type:'bar',data:[20,15,55,0],itemStyle:{color:'#3b82f6'}},{name:'研发提速%',type:'bar',data:[10,25,0,30],itemStyle:{color:'#eab308'}}]});window.addEventListener('resize',()=>c.resize())}
+
+initC('overview');
+</script>
+</body>
+</html>

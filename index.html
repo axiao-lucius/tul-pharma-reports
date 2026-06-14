@@ -10,8 +10,9 @@
         .container { max-width: 800px; width: 90%; padding: 3rem 2rem; text-align: center; }
         h1 { font-size: 2.2rem; margin-bottom: 0.5rem; background: linear-gradient(90deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .subtitle { font-size: 1.1rem; color: #94a3b8; margin-bottom: 3rem; }
-        .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
         @media (max-width: 640px) { .cards { grid-template-columns: 1fr; } }
+        .section-title { font-size: 1rem; color: #60a5fa; margin: 2rem 0 1rem; text-transform: uppercase; letter-spacing: 2px; }
         .card { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 16px; padding: 2rem 1.5rem; text-decoration: none; color: #e2e8f0; transition: all 0.3s ease; backdrop-filter: blur(10px); }
         .card:hover { transform: translateY(-4px); border-color: #60a5fa; box-shadow: 0 8px 32px rgba(96, 165, 250, 0.15); }
         .card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
@@ -34,6 +35,19 @@
                 <div class="card-icon">🤖</div>
                 <h2>数字化转型与<br>AI应用升级分析</h2>
                 <p>评估数字化现状，对标行业标杆案例，提出智能制造、AI研发、智慧供应链的三年转型路线图。</p>
+            </a>
+        </div>
+        <p class="section-title">📋 解决方案 & 演示</p>
+        <div class="cards">
+            <a href="solution.html" class="card" style="border-color:rgba(13,148,136,0.4)">
+                <div class="card-icon">📐</div>
+                <h2>数字化转型<br>解决方案</h2>
+                <p>四大优先场景实施方案、三年转型路线图、ROI测算、组织保障与风险防控体系。</p>
+            </a>
+            <a href="demo.html" class="card" style="border-color:rgba(234,179,8,0.4)">
+                <div class="card-icon">🎮</div>
+                <h2>交互式<br>演示Demo</h2>
+                <p>数字化现状仪表盘、AI应用场景模拟、ROI计算器、标杆对比可视化。</p>
             </a>
         </div>
         <p class="footer">由 Wukong AI 深度研究生成 · Academic Research Skills (ARS)</p>
